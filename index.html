@@ -4,37 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>英語発音トレーニング</title>
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
     <div class="app">
 
-        <h1>英語発音トレーニング</h1>
+        <section id="selectScreen">
 
-        <p class="label">今日のフレーズ</p>
+            <h1>英語発音トレーニング</h1>
 
-        <div class="phrase" id="phrase">The rabbit runs around the lake.</div>
+            <p class="label">練習する表現を選んでください</p>
 
-        <button id="sampleButton">🔊 お手本を聞く</button>
+            <div id="phraseList" class="phrase-list"></div>
 
-        <button id="recordButton">🎤 認識を開始</button>
+        </section>
 
-        <button id="retryButton">🔄 もう一度練習する</button>
+        <section id="practiceScreen" hidden>
 
-        <p id="status">認識待機中</p>
+            <button id="backButton">◀ 表現の選択に戻る</button>
 
-        <div id="totalScore" class="total-score"></div>
+            <p class="label">練習するフレーズ</p>
 
-        <div id="result"></div>
+            <div class="phrase" id="phrase"></div>
 
-        <div id="tips"></div>
+            <p id="phraseJa" class="phrase-ja"></p>
 
-        <p class="note">HTMLの版：3</p>
+            <button id="sampleButton">🔊 お手本を聞く</button>
+
+            <button id="recordButton">🎤 認識を開始</button>
+
+            <button id="retryButton">🔄 もう一度練習する</button>
+
+            <p id="status">認識待機中</p>
+
+            <div id="totalScore" class="total-score"></div>
+
+            <div id="result"></div>
+
+            <div id="tips"></div>
+
+        </section>
+
+        <p class="note">HTMLの版：4</p>
 
     </div>
 
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=4"></script>
 
 </body>
 </html>
