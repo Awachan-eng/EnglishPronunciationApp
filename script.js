@@ -1,7 +1,50 @@
-const VERSION = "3";
-const SAMPLE_AUDIO_FILE = "";
+const VERSION = "4";
 
+const phrases = [
+    {
+        id: 1,
+        text: "The rabbit runs around the lake.",
+        ja: "うさぎは湖のまわりを走ります。",
+        focus: "r / l / th（the）"
+    },
+    {
+        id: 2,
+        text: "I think Thursday is the best day.",
+        ja: "木曜日が一番いい日だと思います。",
+        focus: "th（think）/ r"
+    },
+    {
+        id: 3,
+        text: "The very heavy van is over there.",
+        ja: "とても重いバンがあそこにあります。",
+        focus: "v / r / th（the）"
+    },
+    {
+        id: 4,
+        text: "Turn right at the light.",
+        ja: "信号を右に曲がってください。",
+        focus: "r / l"
+    },
+    {
+        id: 5,
+        text: "I would like a cup of coffee.",
+        ja: "コーヒーを1杯いただきたいです。",
+        focus: "f / v / l"
+    },
+    {
+        id: 6,
+        text: "Thank you very much.",
+        ja: "どうもありがとうございます。",
+        focus: "th（thank）/ v / r"
+    }
+];
+
+const selectScreen = document.getElementById("selectScreen");
+const practiceScreen = document.getElementById("practiceScreen");
+const phraseList = document.getElementById("phraseList");
+const backButton = document.getElementById("backButton");
 const phraseElement = document.getElementById("phrase");
+const phraseJaElement = document.getElementById("phraseJa");
 const result = document.getElementById("result");
 const tipsElement = document.getElementById("tips");
 const totalScoreElement = document.getElementById("totalScore");
@@ -9,8 +52,6 @@ const statusText = document.getElementById("status");
 const sampleButton = document.getElementById("sampleButton");
 const recordButton = document.getElementById("recordButton");
 const retryButton = document.getElementById("retryButton");
-
-const correctText = phraseElement.textContent.trim();
 
 const SpeechRecognitionClass =
     window.SpeechRecognition ||
@@ -31,13 +72,31 @@ const wordInfo = {
     "rabbit": { ipa: "/ˈræbɪt/", sounds: ["r", "ae"] },
     "runs": { ipa: "/rʌnz/", sounds: ["r", "uh"] },
     "around": { ipa: "/əˈraʊnd/", sounds: ["r", "ow"] },
-    "lake": { ipa: "/leɪk/", sounds: ["l", "ei"] }
+    "lake": { ipa: "/leɪk/", sounds: ["l", "ei"] },
+    "think": { ipa: "/θɪŋk/", sounds: ["theta"] },
+    "thursday": { ipa: "/ˈθɜːrzdeɪ/", sounds: ["theta", "r", "ei"] },
+    "day": { ipa: "/deɪ/", sounds: ["ei"] },
+    "very": { ipa: "/ˈvɛri/", sounds: ["v", "r"] },
+    "heavy": { ipa: "/ˈhɛvi/", sounds: ["v"] },
+    "van": { ipa: "/væn/", sounds: ["v", "ae"] },
+    "over": { ipa: "/ˈoʊvər/", sounds: ["v", "r"] },
+    "there": { ipa: "/ðɛr/", sounds: ["th", "r"] },
+    "turn": { ipa: "/tɜːrn/", sounds: ["r"] },
+    "right": { ipa: "/raɪt/", sounds: ["r"] },
+    "at": { ipa: "/æt/", sounds: ["ae"] },
+    "light": { ipa: "/laɪt/", sounds: ["l"] },
+    "like": { ipa: "/laɪk/", sounds: ["l"] },
+    "cup": { ipa: "/kʌp/", sounds: ["uh"] },
+    "of": { ipa: "/əv/", sounds: ["v"] },
+    "coffee": { ipa: "/ˈkɒfi/", sounds: ["f"] },
+    "thank": { ipa: "/θæŋk/", sounds: ["theta", "ae"] },
+    "much": { ipa: "/mʌtʃ/", sounds: ["uh"] }
 };
 
 const soundInfo = {
     "th": {
         symbol: "/ð/",
-        title: "th の音",
+        title: "th の音（the, there など：声を出す）",
         advice: "舌先を上の前歯と下の前歯の間に軽く出し、歯に軽く当てたまま、声を出しながら息を出します。舌を歯の裏へ引っ込めてしまわないのがコツです。",
         common: "「ザ」や「ダ」になりやすい音です。",
         draw: {
@@ -51,6 +110,64 @@ const soundInfo = {
                 "M44 " + (116 + j) +
                 " C50 90 90 82 120 80 L157 74 L157 84 L136 " + (96 + j) +
                 " L118 " + (108 + j) + " Z"
+        }
+    },
+    "theta": {
+        symbol: "/θ/",
+        title: "th の音（think, thank など：息だけ）",
+        advice: "舌先を上下の前歯の間に軽く出し、声は出さずに、息だけをすき間から出します。声を出すと濁った音になるので、息の音だけにするのがコツです。",
+        common: "「サ」や「ス」、「タ」になりやすい音です。",
+        draw: {
+            jaw: 0,
+            protrude: 0,
+            rounded: false,
+            labelY: 104,
+            note: "舌先を歯の間に出して息だけ",
+            arrow: false,
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C50 90 90 82 120 80 L157 74 L157 84 L136 " + (96 + j) +
+                " L118 " + (108 + j) + " Z"
+        }
+    },
+    "v": {
+        symbol: "/v/",
+        title: "v の音",
+        advice: "上の前歯を下唇に軽く当てて、わずかなすき間をつくります。そのまま声を出しながら息を出し、唇に細かい振動を感じるようにします。両唇を合わせないのがコツです。",
+        common: "両唇を使う「バ」行になりやすい音です（very が berry のように聞こえます）。",
+        draw: {
+            jaw: 0,
+            protrude: 0,
+            rounded: false,
+            lowerLipY: 70,
+            labelY: 108,
+            note: "上の歯を下唇に当てて声を出す",
+            arrow: false,
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C60 " + (110 + j) + " 90 " + (106 + j) + " 118 " + (104 + j) +
+                " L136 " + (104 + j) + " L136 " + (110 + j) +
+                " L116 " + (114 + j) + " L98 " + (116 + j) + " Z"
+        }
+    },
+    "f": {
+        symbol: "/f/",
+        title: "f の音",
+        advice: "v と同じ口の形で、声を出さず、息だけを出します。上の前歯を下唇に軽く当て、すき間から息を強めに出すと「フッ」という音になります。",
+        common: "両唇をすぼめる日本語の「フ」になりやすい音です。",
+        draw: {
+            jaw: 0,
+            protrude: 0,
+            rounded: false,
+            lowerLipY: 70,
+            labelY: 108,
+            note: "上の歯を下唇に当てて息だけ",
+            arrow: false,
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C60 " + (110 + j) + " 90 " + (106 + j) + " 118 " + (104 + j) +
+                " L136 " + (104 + j) + " L136 " + (110 + j) +
+                " L116 " + (114 + j) + " L98 " + (116 + j) + " Z"
         }
     },
     "r": {
@@ -91,7 +208,7 @@ const soundInfo = {
     },
     "ae": {
         symbol: "/æ/",
-        title: "æ（rabbit の a）の音",
+        title: "æ（rabbit, van, thank の a）の音",
         advice: "口を縦に大きく開け、口角を少し横に引きます。「ア」と「エ」の中間の音を、舌先を下の前歯の裏に置いたまま出します。あごを下げる意識を持つと出しやすくなります。",
         common: "日本語の「ア」や「エ」になりやすい音です。",
         draw: {
@@ -110,7 +227,7 @@ const soundInfo = {
     },
     "uh": {
         symbol: "/ʌ/",
-        title: "ʌ（runs の u）の音",
+        title: "ʌ（runs, cup, much の u）の音",
         advice: "口を軽く開け、力を抜いて短く「ア」と言います。日本語の「ア」より口の開きを小さくして、のどの奥から短く出します。",
         common: "日本語の「ア」や「オ」のように、口を開けすぎたり長く伸ばしたりしやすい音です。",
         draw: {
@@ -147,7 +264,7 @@ const soundInfo = {
     },
     "ei": {
         symbol: "/eɪ/",
-        title: "eɪ（lake の a）の音",
+        title: "eɪ（lake, day の a）の音",
         advice: "「エ」から「イ」へなめらかに動かします。「エー」と伸ばしきらず、終わりにかけて舌を少し持ち上げ、口を少しだけ閉じていきます。",
         common: "「エー」と長く伸ばしたままで、「イ」の動きが入らなくなりやすい音です。",
         draw: {
@@ -165,19 +282,15 @@ const soundInfo = {
     }
 };
 
-const targetWords = correctText
-    .split(/\s+/)
-    .map((word) => word.replace(/[^A-Za-z0-9']/g, ""))
-    .filter((word) => word.length > 0);
-
-const normalizedTargets = targetWords.map((word) => normalizeWord(word));
-
+let currentText = "";
+let targetWords = [];
+let normalizedTargets = [];
 let recognition = null;
 let isListening = false;
 let resultReceived = false;
 let lastError = "";
 let voices = [];
-let currentAudio = null;
+let cameFromSelect = false;
 
 window.addEventListener("error", (event) => {
     statusText.textContent = "プログラムエラー：" + event.message;
@@ -369,6 +482,9 @@ function buildMouthSvg(info) {
     const lipX = 161 + d.protrude;
     const lipRx = d.rounded ? 7 : 9;
     const lipRy = d.rounded ? 10 : 8;
+    const lowerLipY = d.lowerLipY !== undefined ? d.lowerLipY : 90 + j;
+    const lowerLipRx = d.lowerLipY !== undefined ? 10 : lipRx;
+    const lowerLipRy = d.lowerLipY !== undefined ? 7 : lipRy;
 
     let svg =
         '<svg class="mouth-svg" viewBox="0 0 200 150" role="img" aria-label="' +
@@ -383,7 +499,7 @@ function buildMouthSvg(info) {
         '<rect x="146" y="52" width="8" height="16" rx="2" fill="#fff" stroke="#555" stroke-width="1.5"/>' +
         '<rect x="146" y="' + (82 + j) + '" width="8" height="16" rx="2" fill="#fff" stroke="#555" stroke-width="1.5"/>' +
         '<ellipse cx="' + lipX + '" cy="57" rx="' + lipRx + '" ry="' + lipRy + '" fill="#e57373"/>' +
-        '<ellipse cx="' + lipX + '" cy="' + (90 + j) + '" rx="' + lipRx + '" ry="' + lipRy + '" fill="#e57373"/>' +
+        '<ellipse cx="' + lipX + '" cy="' + lowerLipY + '" rx="' + lowerLipRx + '" ry="' + lowerLipRy + '" fill="#e57373"/>' +
         '<text x="70" y="' + d.labelY + '" font-size="12" fill="#7a1f1f">舌</text>';
 
     if (d.arrow) {
@@ -425,7 +541,7 @@ function renderTips(words) {
 
     if (order.length === 0) {
         tipsElement.innerHTML =
-            "<p>すべての単語が良好でした。改善が必要な音はありません。</p>";
+            "<p>改善が必要な音はありません。</p>";
         return;
     }
 
@@ -561,28 +677,9 @@ function stopAllSound() {
     if ("speechSynthesis" in window) {
         window.speechSynthesis.cancel();
     }
-
-    if (currentAudio) {
-        currentAudio.pause();
-        currentAudio = null;
-    }
 }
 
-function speak(text, useFile) {
-    if (useFile && SAMPLE_AUDIO_FILE) {
-        stopAllSound();
-        currentAudio = new Audio(SAMPLE_AUDIO_FILE);
-        currentAudio.addEventListener("ended", () => {
-            statusText.textContent = "お手本の再生が終わりました。";
-        });
-        currentAudio.play().catch(() => {
-            statusText.textContent =
-                "お手本の音声ファイルを再生できませんでした。ファイル名を確認してください。";
-        });
-        statusText.textContent = "🔊 お手本を再生中です！";
-        return;
-    }
-
+function speak(text) {
     if (!("speechSynthesis" in window)) {
         statusText.textContent =
             "このブラウザはお手本の読み上げに対応していません。";
@@ -619,6 +716,26 @@ function speak(text, useFile) {
             ? "🔊 お手本を再生中です！"
             : "🔊 再生中です（端末に英語の音声が見つからないため、日本語の音声で読まれる可能性があります）";
     }, 150);
+}
+
+function abortRecognition() {
+    if (recognition) {
+        recognition.onresult = null;
+        recognition.onerror = null;
+        recognition.onend = null;
+        recognition.onstart = null;
+        recognition.onspeechstart = null;
+
+        try {
+            recognition.abort();
+        } catch (error) {
+            console.log(error);
+        }
+
+        recognition = null;
+    }
+
+    setListening(false);
 }
 
 function startRecognition() {
@@ -698,13 +815,102 @@ function startRecognition() {
     }, 250);
 }
 
+function setPhrase(phrase) {
+    currentText = phrase.text;
+    phraseElement.textContent = phrase.text;
+    phraseJaElement.textContent = phrase.ja;
+
+    targetWords = phrase.text
+        .split(/\s+/)
+        .map((word) => word.replace(/[^A-Za-z0-9']/g, ""))
+        .filter((word) => word.length > 0);
+
+    normalizedTargets = targetWords.map((word) => normalizeWord(word));
+}
+
+function showSelect() {
+    abortRecognition();
+    stopAllSound();
+    clearOutput();
+    cameFromSelect = false;
+    selectScreen.hidden = false;
+    practiceScreen.hidden = true;
+    statusText.textContent = "認識待機中";
+    window.scrollTo(0, 0);
+}
+
+function showPractice(phrase) {
+    abortRecognition();
+    stopAllSound();
+    clearOutput();
+    setPhrase(phrase);
+    selectScreen.hidden = true;
+    practiceScreen.hidden = false;
+    statusText.textContent = "認識待機中";
+    window.scrollTo(0, 0);
+}
+
+function routeFromHash() {
+    const match = location.hash.match(/^#phrase(\d+)$/);
+
+    if (match) {
+        const phrase = phrases.find((p) => p.id === Number(match[1]));
+
+        if (phrase) {
+            showPractice(phrase);
+            return;
+        }
+    }
+
+    showSelect();
+}
+
+function buildPhraseList() {
+    phrases.forEach((phrase) => {
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = "phrase-item";
+
+        const text = document.createElement("span");
+        text.className = "phrase-item-text";
+        text.textContent = phrase.text;
+
+        const ja = document.createElement("span");
+        ja.className = "phrase-item-ja";
+        ja.textContent = phrase.ja;
+
+        const focus = document.createElement("span");
+        focus.className = "phrase-item-focus";
+        focus.textContent = "重点の音：" + phrase.focus;
+
+        item.appendChild(text);
+        item.appendChild(ja);
+        item.appendChild(focus);
+
+        item.addEventListener("click", () => {
+            cameFromSelect = true;
+            location.hash = "phrase" + phrase.id;
+        });
+
+        phraseList.appendChild(item);
+    });
+}
+
 if ("speechSynthesis" in window) {
     loadVoices();
     window.speechSynthesis.onvoiceschanged = loadVoices;
 }
 
+backButton.addEventListener("click", () => {
+    if (cameFromSelect) {
+        history.back();
+    } else {
+        location.hash = "";
+    }
+});
+
 sampleButton.addEventListener("click", () => {
-    speak(correctText, true);
+    speak(currentText);
 });
 
 recordButton.addEventListener("click", () => {
@@ -723,7 +929,7 @@ tipsElement.addEventListener("click", (event) => {
 
     if (!button) return;
 
-    speak(button.dataset.word, false);
+    speak(button.dataset.word);
 });
 
 retryButton.addEventListener("click", () => {
@@ -734,7 +940,10 @@ retryButton.addEventListener("click", () => {
 
     stopAllSound();
     clearOutput();
-    statusText.textContent = "認識待機中（版" + VERSION + "）";
+    statusText.textContent = "認識待機中";
 });
 
-statusText.textContent = "認識待機中（版" + VERSION + "）";
+window.addEventListener("hashchange", routeFromHash);
+
+buildPhraseList();
+routeFromHash();
