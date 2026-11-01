@@ -1,41 +1,29 @@
-const VERSION = "4";
+const VERSION = "5";
 
 const phrases = [
     {
         id: 1,
-        text: "The rabbit runs around the lake.",
-        ja: "うさぎは湖のまわりを走ります。",
+        text: "Turn right at the light.",
+        ja: "信号を右に曲がってください。",
         focus: "r / l / th（the）"
     },
     {
         id: 2,
-        text: "I think Thursday is the best day.",
-        ja: "木曜日が一番いい日だと思います。",
-        focus: "th（think）/ r"
+        text: "Vicky bought a vest for her brother.",
+        ja: "ヴィッキーは兄（弟）のためにベストを買いました。",
+        focus: "v / b / f / r"
     },
     {
         id: 3,
-        text: "The very heavy van is over there.",
-        ja: "とても重いバンがあそこにあります。",
-        focus: "v / r / th（the）"
+        text: "Sally thinks about the thick soup.",
+        ja: "サリーはその濃いスープのことを考えています。",
+        focus: "s / th（thinks, thick）"
     },
     {
         id: 4,
-        text: "Turn right at the light.",
-        ja: "信号を右に曲がってください。",
-        focus: "r / l"
-    },
-    {
-        id: 5,
-        text: "I would like a cup of coffee.",
-        ja: "コーヒーを1杯いただきたいです。",
-        focus: "f / v / l"
-    },
-    {
-        id: 6,
-        text: "Thank you very much.",
-        ja: "どうもありがとうございます。",
-        focus: "th（thank）/ v / r"
+        text: "She sees sheep by the sea.",
+        ja: "彼女は海のそばで羊を見ます。",
+        focus: "sh / s / イー（長い音）"
     }
 ];
 
@@ -68,35 +56,33 @@ const errorMessages = {
 };
 
 const wordInfo = {
-    "the": { ipa: "/ðə/", sounds: ["th"] },
-    "rabbit": { ipa: "/ˈræbɪt/", sounds: ["r", "ae"] },
-    "runs": { ipa: "/rʌnz/", sounds: ["r", "uh"] },
-    "around": { ipa: "/əˈraʊnd/", sounds: ["r", "ow"] },
-    "lake": { ipa: "/leɪk/", sounds: ["l", "ei"] },
-    "think": { ipa: "/θɪŋk/", sounds: ["theta"] },
-    "thursday": { ipa: "/ˈθɜːrzdeɪ/", sounds: ["theta", "r", "ei"] },
-    "day": { ipa: "/deɪ/", sounds: ["ei"] },
-    "very": { ipa: "/ˈvɛri/", sounds: ["v", "r"] },
-    "heavy": { ipa: "/ˈhɛvi/", sounds: ["v"] },
-    "van": { ipa: "/væn/", sounds: ["v", "ae"] },
-    "over": { ipa: "/ˈoʊvər/", sounds: ["v", "r"] },
-    "there": { ipa: "/ðɛr/", sounds: ["th", "r"] },
     "turn": { ipa: "/tɜːrn/", sounds: ["r"] },
     "right": { ipa: "/raɪt/", sounds: ["r"] },
     "at": { ipa: "/æt/", sounds: ["ae"] },
+    "the": { ipa: "/ðə/", sounds: ["th"] },
     "light": { ipa: "/laɪt/", sounds: ["l"] },
-    "like": { ipa: "/laɪk/", sounds: ["l"] },
-    "cup": { ipa: "/kʌp/", sounds: ["uh"] },
-    "of": { ipa: "/əv/", sounds: ["v"] },
-    "coffee": { ipa: "/ˈkɒfi/", sounds: ["f"] },
-    "thank": { ipa: "/θæŋk/", sounds: ["theta", "ae"] },
-    "much": { ipa: "/mʌtʃ/", sounds: ["uh"] }
+    "vicky": { ipa: "/ˈvɪki/", sounds: ["v", "ih"] },
+    "bought": { ipa: "/bɔːt/", sounds: ["b"] },
+    "vest": { ipa: "/vɛst/", sounds: ["v", "s"] },
+    "for": { ipa: "/fɔːr/", sounds: ["f", "r"] },
+    "her": { ipa: "/hɜːr/", sounds: ["r"] },
+    "brother": { ipa: "/ˈbrʌðər/", sounds: ["b", "r", "uh", "th"] },
+    "sally": { ipa: "/ˈsæli/", sounds: ["s", "ae", "l"] },
+    "thinks": { ipa: "/θɪŋks/", sounds: ["theta", "ih", "s"] },
+    "about": { ipa: "/əˈbaʊt/", sounds: ["b", "ow"] },
+    "thick": { ipa: "/θɪk/", sounds: ["theta", "ih"] },
+    "soup": { ipa: "/suːp/", sounds: ["s", "uw"] },
+    "she": { ipa: "/ʃiː/", sounds: ["sh", "iy"] },
+    "sees": { ipa: "/siːz/", sounds: ["s", "iy"] },
+    "sheep": { ipa: "/ʃiːp/", sounds: ["sh", "iy"] },
+    "by": { ipa: "/baɪ/", sounds: ["b"] },
+    "sea": { ipa: "/siː/", sounds: ["s", "iy"] }
 };
 
 const soundInfo = {
     "th": {
         symbol: "/ð/",
-        title: "th の音（the, there など：声を出す）",
+        title: "th の音（the, brother など：声を出す）",
         advice: "舌先を上の前歯と下の前歯の間に軽く出し、歯に軽く当てたまま、声を出しながら息を出します。舌を歯の裏へ引っ込めてしまわないのがコツです。",
         common: "「ザ」や「ダ」になりやすい音です。",
         draw: {
@@ -114,9 +100,9 @@ const soundInfo = {
     },
     "theta": {
         symbol: "/θ/",
-        title: "th の音（think, thank など：息だけ）",
+        title: "th の音（thinks, thick など：息だけ）",
         advice: "舌先を上下の前歯の間に軽く出し、声は出さずに、息だけをすき間から出します。声を出すと濁った音になるので、息の音だけにするのがコツです。",
-        common: "「サ」や「ス」、「タ」になりやすい音です。",
+        common: "「サ」や「ス」、「タ」になりやすい音です（thick が sick のように聞こえます）。",
         draw: {
             jaw: 0,
             protrude: 0,
@@ -130,16 +116,86 @@ const soundInfo = {
                 " L118 " + (108 + j) + " Z"
         }
     },
+    "s": {
+        symbol: "/s/",
+        title: "s の音（sees, sea, soup など）",
+        advice: "上下の歯をほぼ閉じ、舌先を上の歯ぐきに近づけて、すき間をつくります。声を出さず、そのすき間から息を細く強く出します。唇は丸めず、軽く横に引きます。",
+        common: "θ（thick の th）と混ざりやすい音です。s では、舌を歯の間に出しません。",
+        draw: {
+            jaw: -6,
+            protrude: 0,
+            rounded: false,
+            lipRx: 10,
+            lipRy: 6,
+            labelY: 104,
+            note: "歯をほぼ閉じ、すき間から息だけ",
+            arrow: false,
+            extra:
+                '<path d="M150 62 C160 62 172 64 186 62" stroke="#1976d2" stroke-width="2" fill="none"/>' +
+                '<path d="M181 57 L189 62 L181 67 Z" fill="#1976d2"/>',
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C54 98 84 92 108 84 C122 76 134 68 142 60 L146 66 C138 78 130 90 120 100 L102 " +
+                (112 + j) + " Z"
+        }
+    },
+    "sh": {
+        symbol: "/ʃ/",
+        title: "sh の音（she, sheep など）",
+        advice: "唇を軽く丸めて前に出し、舌先を歯ぐきの少し後ろに近づけて、舌全体を少し後ろに引きます。声を出さず、息を長く出して「シュー」という音を出します。",
+        common: "s と区別がつかず、she が see のようになりやすい音です。",
+        draw: {
+            jaw: -4,
+            protrude: 6,
+            rounded: true,
+            labelY: 104,
+            note: "唇を丸めて前に出し、舌を少し後ろへ",
+            arrow: false,
+            extra:
+                '<path d="M140 60 C152 60 168 62 186 60" stroke="#1976d2" stroke-width="2" fill="none"/>' +
+                '<path d="M181 55 L189 60 L181 65 Z" fill="#1976d2"/>',
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C54 98 80 88 104 80 C116 74 126 64 132 58 L138 64 C132 78 126 90 118 100 L100 " +
+                (112 + j) + " Z"
+        }
+    },
+    "b": {
+        symbol: "/b/",
+        title: "b の音（bought, brother, by など）",
+        advice: "両方の唇をしっかり閉じ、口の中に息をためてから、唇を開いて一気に声を出します。v のように上の歯を唇に当てないのがコツです。",
+        common: "唇を軽く閉じるだけで、息の破裂が弱くなりやすい音です。",
+        draw: {
+            jaw: 0,
+            protrude: 0,
+            rounded: false,
+            lowerLipY: 71,
+            lowerLipRx: 9,
+            lowerLipRy: 7,
+            labelY: 108,
+            note: "両唇を閉じてから一気に開く",
+            arrow: false,
+            extra:
+                '<path d="M176 60 L190 54 M178 70 L192 70 M176 80 L190 86" stroke="#1976d2" stroke-width="2" fill="none"/>',
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C60 " + (110 + j) + " 90 " + (106 + j) + " 118 " + (104 + j) +
+                " L136 " + (104 + j) + " L136 " + (110 + j) +
+                " L116 " + (114 + j) + " L98 " + (116 + j) + " Z"
+        }
+    },
     "v": {
         symbol: "/v/",
         title: "v の音",
         advice: "上の前歯を下唇に軽く当てて、わずかなすき間をつくります。そのまま声を出しながら息を出し、唇に細かい振動を感じるようにします。両唇を合わせないのがコツです。",
-        common: "両唇を使う「バ」行になりやすい音です（very が berry のように聞こえます）。",
+        common: "両唇を使う「バ」行になりやすい音です（vest が best のように聞こえます）。",
         draw: {
             jaw: 0,
             protrude: 0,
             rounded: false,
             lowerLipY: 70,
+            lowerLipRx: 10,
+            lowerLipRy: 7,
             labelY: 108,
             note: "上の歯を下唇に当てて声を出す",
             arrow: false,
@@ -160,6 +216,8 @@ const soundInfo = {
             protrude: 0,
             rounded: false,
             lowerLipY: 70,
+            lowerLipRx: 10,
+            lowerLipRy: 7,
             labelY: 108,
             note: "上の歯を下唇に当てて息だけ",
             arrow: false,
@@ -192,7 +250,7 @@ const soundInfo = {
         symbol: "/l/",
         title: "l の音",
         advice: "舌先を上の前歯の裏のすぐ後ろ（歯ぐきの付け根）にしっかり押し当てます。舌先をつけたまま、舌の両脇から声を出します。舌先をはじかず、少し長めに保つと l らしくなります。",
-        common: "r と混ざったり、日本語のラ行になったりしやすい音です。",
+        common: "r と混ざったり、日本語のラ行になったりしやすい音です（light が right のように聞こえます）。",
         draw: {
             jaw: 0,
             protrude: 0,
@@ -206,9 +264,68 @@ const soundInfo = {
                 (104 + j) + " L112 " + (108 + j) + " Z"
         }
     },
+    "iy": {
+        symbol: "/iː/",
+        title: "iː（she, sees, sheep, sea の ee）の音",
+        advice: "口角を横にしっかり引き、舌を高く前に出して、「イー」と少し長めに出します。日本語の「イ」より唇の緊張を保ったまま、伸ばすのがコツです。",
+        common: "短い「イ」になり、sheep が ship のように聞こえやすい音です。",
+        draw: {
+            jaw: 4,
+            protrude: 0,
+            rounded: false,
+            lipRx: 11,
+            lipRy: 5,
+            labelY: 112,
+            note: "口角を横に引き、舌を高く前へ",
+            arrow: false,
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C56 98 84 80 112 70 C124 66 134 64 142 64 L142 72 C134 82 124 94 114 102 L100 " +
+                (112 + j) + " Z"
+        }
+    },
+    "ih": {
+        symbol: "/ɪ/",
+        title: "ɪ（Vicky, thinks, thick の i）の音",
+        advice: "日本語の「イ」より口を少し開け、力を抜いて短く出します。舌は「イー」ほど高くせず、「イ」と「エ」の中間のような、ゆるい音にします。",
+        common: "「イー」と長く伸びやすく、短い音と長い音の区別がなくなりやすい音です。",
+        draw: {
+            jaw: 8,
+            protrude: 0,
+            rounded: false,
+            labelY: 112,
+            note: "力を抜いて短く",
+            arrow: false,
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C54 " + (100 + j) + " 84 " + (86 + j) + " 110 " + (80 + j) +
+                " L136 " + (80 + j) + " L136 " + (88 + j) +
+                " L116 " + (100 + j) + " L98 " + (110 + j) + " Z"
+        }
+    },
+    "uw": {
+        symbol: "/uː/",
+        title: "uː（soup の ou）の音",
+        advice: "唇を丸めて前に突き出し、舌の奥を高く持ち上げて、「ウー」と少し長めに出します。日本語の「ウ」より、唇をしっかり丸めるのがコツです。",
+        common: "唇を丸めず、日本語の「ウ」のように平らな音になりやすい音です。",
+        draw: {
+            jaw: 2,
+            protrude: 8,
+            rounded: true,
+            lipRx: 6,
+            lipRy: 9,
+            labelY: 110,
+            note: "唇を丸めて前に出し、舌の奥を上げる",
+            arrow: false,
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C56 100 76 72 100 66 C112 62 120 68 124 80 L136 98 L120 104 L100 " +
+                (112 + j) + " Z"
+        }
+    },
     "ae": {
         symbol: "/æ/",
-        title: "æ（rabbit, van, thank の a）の音",
+        title: "æ（at, Sally の a）の音",
         advice: "口を縦に大きく開け、口角を少し横に引きます。「ア」と「エ」の中間の音を、舌先を下の前歯の裏に置いたまま出します。あごを下げる意識を持つと出しやすくなります。",
         common: "日本語の「ア」や「エ」になりやすい音です。",
         draw: {
@@ -227,7 +344,7 @@ const soundInfo = {
     },
     "uh": {
         symbol: "/ʌ/",
-        title: "ʌ（runs, cup, much の u）の音",
+        title: "ʌ（brother の o）の音",
         advice: "口を軽く開け、力を抜いて短く「ア」と言います。日本語の「ア」より口の開きを小さくして、のどの奥から短く出します。",
         common: "日本語の「ア」や「オ」のように、口を開けすぎたり長く伸ばしたりしやすい音です。",
         draw: {
@@ -245,7 +362,7 @@ const soundInfo = {
     },
     "ow": {
         symbol: "/aʊ/",
-        title: "aʊ（around の ou）の音",
+        title: "aʊ（about の ou）の音",
         advice: "「ア」の口の形から始め、すぐに唇を丸めて「ウ」の方向へなめらかに動かします。2つの音を切らずに、1つの音として続けて出します。",
         common: "「アウ」と2つに分かれたり、最後の「ウ」が弱くなったりしやすい音です。",
         draw: {
@@ -260,24 +377,6 @@ const soundInfo = {
                 " C58 " + (106 + j) + " 84 " + (100 + j) + " 108 " + (98 + j) +
                 " L128 " + (100 + j) + " L124 " + (112 + j) +
                 " L100 " + (114 + j) + " Z"
-        }
-    },
-    "ei": {
-        symbol: "/eɪ/",
-        title: "eɪ（lake, day の a）の音",
-        advice: "「エ」から「イ」へなめらかに動かします。「エー」と伸ばしきらず、終わりにかけて舌を少し持ち上げ、口を少しだけ閉じていきます。",
-        common: "「エー」と長く伸ばしたままで、「イ」の動きが入らなくなりやすい音です。",
-        draw: {
-            jaw: 6,
-            protrude: 0,
-            rounded: false,
-            labelY: 108,
-            note: "エ → イへなめらかに",
-            arrow: false,
-            tongue: (j) =>
-                "M44 " + (116 + j) +
-                " C54 96 80 84 106 78 C124 74 138 74 144 78 L144 " + (88 + j) +
-                " L124 " + (100 + j) + " L104 " + (110 + j) + " Z"
         }
     }
 };
@@ -480,11 +579,11 @@ function buildMouthSvg(info) {
     const d = info.draw;
     const j = d.jaw;
     const lipX = 161 + d.protrude;
-    const lipRx = d.rounded ? 7 : 9;
-    const lipRy = d.rounded ? 10 : 8;
+    const upperRx = d.lipRx !== undefined ? d.lipRx : (d.rounded ? 7 : 9);
+    const upperRy = d.lipRy !== undefined ? d.lipRy : (d.rounded ? 10 : 8);
+    const lowerRx = d.lowerLipRx !== undefined ? d.lowerLipRx : upperRx;
+    const lowerRy = d.lowerLipRy !== undefined ? d.lowerLipRy : upperRy;
     const lowerLipY = d.lowerLipY !== undefined ? d.lowerLipY : 90 + j;
-    const lowerLipRx = d.lowerLipY !== undefined ? 10 : lipRx;
-    const lowerLipRy = d.lowerLipY !== undefined ? 7 : lipRy;
 
     let svg =
         '<svg class="mouth-svg" viewBox="0 0 200 150" role="img" aria-label="' +
@@ -498,14 +597,18 @@ function buildMouthSvg(info) {
         ' 40 ' + (118 + j) + '" fill="none" stroke="#555" stroke-width="3"/>' +
         '<rect x="146" y="52" width="8" height="16" rx="2" fill="#fff" stroke="#555" stroke-width="1.5"/>' +
         '<rect x="146" y="' + (82 + j) + '" width="8" height="16" rx="2" fill="#fff" stroke="#555" stroke-width="1.5"/>' +
-        '<ellipse cx="' + lipX + '" cy="57" rx="' + lipRx + '" ry="' + lipRy + '" fill="#e57373"/>' +
-        '<ellipse cx="' + lipX + '" cy="' + lowerLipY + '" rx="' + lowerLipRx + '" ry="' + lowerLipRy + '" fill="#e57373"/>' +
+        '<ellipse cx="' + lipX + '" cy="57" rx="' + upperRx + '" ry="' + upperRy + '" fill="#e57373"/>' +
+        '<ellipse cx="' + lipX + '" cy="' + lowerLipY + '" rx="' + lowerRx + '" ry="' + lowerRy + '" fill="#e57373"/>' +
         '<text x="70" y="' + d.labelY + '" font-size="12" fill="#7a1f1f">舌</text>';
 
     if (d.arrow) {
         svg +=
             '<path d="M184 108 L184 84" stroke="#1976d2" stroke-width="2" fill="none"/>' +
             '<path d="M179 90 L184 82 L189 90 Z" fill="#1976d2"/>';
+    }
+
+    if (d.extra) {
+        svg += d.extra;
     }
 
     svg +=
