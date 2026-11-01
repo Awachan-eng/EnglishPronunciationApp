@@ -1,3 +1,7 @@
+[hidden] {
+    display: none !important;
+}
+
 body {
     margin: 0;
     font-family: sans-serif;
@@ -22,10 +26,15 @@ h1 {
 }
 
 .phrase {
-    margin: 30px 0;
+    margin: 20px 0 6px;
     padding: 20px;
     font-size: 24px;
     font-weight: bold;
+}
+
+.phrase-ja {
+    margin: 0 0 20px;
+    color: #666;
 }
 
 button {
@@ -37,6 +46,11 @@ button {
     border: none;
     border-radius: 10px;
     cursor: pointer;
+}
+
+#backButton {
+    background: #eee;
+    font-size: 16px;
 }
 
 #sampleButton {
@@ -54,6 +68,46 @@ button {
 #status {
     margin-top: 20px;
     font-weight: bold;
+}
+
+.phrase-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.phrase-item {
+    margin: 0;
+    padding: 16px;
+    text-align: left;
+    background: #eef3ff;
+    border: 2px solid transparent;
+}
+
+.phrase-item:active {
+    border-color: #1976d2;
+}
+
+.phrase-item-text {
+    display: block;
+    font-size: 20px;
+    font-weight: bold;
+    color: #222;
+}
+
+.phrase-item-ja {
+    display: block;
+    margin-top: 6px;
+    font-size: 14px;
+    color: #555;
+}
+
+.phrase-item-focus {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #1976d2;
 }
 
 .wrong {
