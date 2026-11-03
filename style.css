@@ -33,8 +33,37 @@ h1 {
 }
 
 .phrase-ja {
-    margin: 0 0 20px;
+    margin: 0 0 10px;
     color: #666;
+}
+
+.phrase-focus {
+    margin: 0 0 20px;
+    font-weight: bold;
+    color: #1976d2;
+}
+
+.level-badge {
+    display: inline-block;
+    margin: 14px 0 0;
+    padding: 6px 16px;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    background: #777;
+    border-radius: 999px;
+}
+
+.level-badge.level-required {
+    background: #c62828;
+}
+
+.level-badge.level-easy {
+    background: #2e7d32;
+}
+
+.level-badge.level-high {
+    background: #6a1b9a;
 }
 
 button {
@@ -77,12 +106,47 @@ button {
     margin-top: 20px;
 }
 
+.level-title {
+    margin: 14px 0 0;
+    padding-left: 10px;
+    font-size: 18px;
+    text-align: left;
+    border-left: 6px solid #777;
+}
+
+.level-title.level-required {
+    border-left-color: #c62828;
+    color: #c62828;
+}
+
+.level-title.level-easy {
+    border-left-color: #2e7d32;
+    color: #2e7d32;
+}
+
+.level-title.level-high {
+    border-left-color: #6a1b9a;
+    color: #6a1b9a;
+}
+
 .phrase-item {
     margin: 0;
     padding: 16px;
     text-align: left;
     background: #eef3ff;
     border: 2px solid transparent;
+}
+
+.phrase-item.level-required {
+    background: #fff1f0;
+}
+
+.phrase-item.level-easy {
+    background: #eef8ee;
+}
+
+.phrase-item.level-high {
+    background: #f6eefa;
 }
 
 .phrase-item:active {
