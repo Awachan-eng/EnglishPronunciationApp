@@ -1,29 +1,53 @@
-const VERSION = "5";
+const VERSION = "6";
+
+const levels = {
+    required: "必須の英文",
+    easy: "Easy Level",
+    high: "High Level"
+};
+
+const levelOrder = ["required", "easy", "high"];
 
 const phrases = [
     {
         id: 1,
+        num: "①",
+        level: "required",
         text: "Turn right at the light.",
         ja: "信号を右に曲がってください。",
-        focus: "r / l / th（the）"
+        focus: "r と l の区別"
     },
     {
         id: 2,
-        text: "Vicky bought a vest for her brother.",
-        ja: "ヴィッキーは兄（弟）のためにベストを買いました。",
-        focus: "v / b / f / r"
+        num: "②",
+        level: "easy",
+        text: "Today, the sun feels awesome.",
+        ja: "今日は太陽が最高に気持ちいいです。",
+        focus: "n と m の区別"
     },
     {
         id: 3,
-        text: "Sally thinks about the thick soup.",
-        ja: "サリーはその濃いスープのことを考えています。",
-        focus: "s / th（thinks, thick）"
+        num: "③",
+        level: "easy",
+        text: "Last year, I hurt my ear.",
+        ja: "去年、私は耳を痛めました。",
+        focus: "y と e の区別"
     },
     {
         id: 4,
-        text: "She sees sheep by the sea.",
-        ja: "彼女は海のそばで羊を見ます。",
-        focus: "sh / s / イー（長い音）"
+        num: "④",
+        level: "high",
+        text: "I want to sit on a seat covered with a white sheet.",
+        ja: "私は白いシーツで覆われた座席に座りたいです。",
+        focus: "i と iː 及び s と ʃ の区別"
+    },
+    {
+        id: 5,
+        num: "⑤",
+        level: "high",
+        text: "I like to sing about the things I think about.",
+        ja: "私は、自分が考えていることについて歌うのが好きです。",
+        focus: "s と θ 及び ŋ と ŋk の区別"
     }
 ];
 
@@ -31,8 +55,10 @@ const selectScreen = document.getElementById("selectScreen");
 const practiceScreen = document.getElementById("practiceScreen");
 const phraseList = document.getElementById("phraseList");
 const backButton = document.getElementById("backButton");
+const phraseLevelElement = document.getElementById("phraseLevel");
 const phraseElement = document.getElementById("phrase");
 const phraseJaElement = document.getElementById("phraseJa");
+const phraseFocusElement = document.getElementById("phraseFocus");
 const result = document.getElementById("result");
 const tipsElement = document.getElementById("tips");
 const totalScoreElement = document.getElementById("totalScore");
@@ -61,28 +87,36 @@ const wordInfo = {
     "at": { ipa: "/æt/", sounds: ["ae"] },
     "the": { ipa: "/ðə/", sounds: ["th"] },
     "light": { ipa: "/laɪt/", sounds: ["l"] },
-    "vicky": { ipa: "/ˈvɪki/", sounds: ["v", "ih"] },
-    "bought": { ipa: "/bɔːt/", sounds: ["b"] },
-    "vest": { ipa: "/vɛst/", sounds: ["v", "s"] },
-    "for": { ipa: "/fɔːr/", sounds: ["f", "r"] },
-    "her": { ipa: "/hɜːr/", sounds: ["r"] },
-    "brother": { ipa: "/ˈbrʌðər/", sounds: ["b", "r", "uh", "th"] },
-    "sally": { ipa: "/ˈsæli/", sounds: ["s", "ae", "l"] },
-    "thinks": { ipa: "/θɪŋks/", sounds: ["theta", "ih", "s"] },
-    "about": { ipa: "/əˈbaʊt/", sounds: ["b", "ow"] },
-    "thick": { ipa: "/θɪk/", sounds: ["theta", "ih"] },
-    "soup": { ipa: "/suːp/", sounds: ["s", "uw"] },
-    "she": { ipa: "/ʃiː/", sounds: ["sh", "iy"] },
-    "sees": { ipa: "/siːz/", sounds: ["s", "iy"] },
-    "sheep": { ipa: "/ʃiːp/", sounds: ["sh", "iy"] },
-    "by": { ipa: "/baɪ/", sounds: ["b"] },
-    "sea": { ipa: "/siː/", sounds: ["s", "iy"] }
+    "today": { ipa: "/təˈdeɪ/", sounds: ["ei"] },
+    "sun": { ipa: "/sʌn/", sounds: ["s", "uh", "n"] },
+    "feels": { ipa: "/fiːlz/", sounds: ["f", "iy", "l"] },
+    "awesome": { ipa: "/ˈɔːsəm/", sounds: ["s", "m"] },
+    "last": { ipa: "/læst/", sounds: ["l", "ae", "s"] },
+    "year": { ipa: "/jɪər/", sounds: ["y", "ih", "r"] },
+    "hurt": { ipa: "/hɜːrt/", sounds: ["r"] },
+    "my": { ipa: "/maɪ/", sounds: ["m"] },
+    "ear": { ipa: "/ɪər/", sounds: ["ih", "r"] },
+    "sit": { ipa: "/sɪt/", sounds: ["s", "ih"] },
+    "seat": { ipa: "/siːt/", sounds: ["s", "iy"] },
+    "covered": { ipa: "/ˈkʌvərd/", sounds: ["uh", "v", "r"] },
+    "with": { ipa: "/wɪð/", sounds: ["ih"] },
+    "sheet": { ipa: "/ʃiːt/", sounds: ["sh", "iy"] },
+    "like": { ipa: "/laɪk/", sounds: ["l"] },
+    "sing": { ipa: "/sɪŋ/", sounds: ["s", "ih", "ng"] },
+    "about": { ipa: "/əˈbaʊt/", sounds: ["ow"] },
+    "things": { ipa: "/θɪŋz/", sounds: ["theta", "ih", "ng"] },
+    "think": { ipa: "/θɪŋk/", sounds: ["theta", "ih", "ngk"] }
 };
+
+const NASAL_ARROW =
+    '<path d="M52 34 C80 18 130 18 156 30" stroke="#1976d2" stroke-width="2" fill="none"/>' +
+    '<path d="M154 24 L164 31 L153 35 Z" fill="#1976d2"/>' +
+    '<text x="100" y="14" font-size="10" fill="#1976d2" text-anchor="middle">鼻から息</text>';
 
 const soundInfo = {
     "th": {
         symbol: "/ð/",
-        title: "th の音（the, brother など：声を出す）",
+        title: "th の音（the など：声を出す）",
         advice: "舌先を上の前歯と下の前歯の間に軽く出し、歯に軽く当てたまま、声を出しながら息を出します。舌を歯の裏へ引っ込めてしまわないのがコツです。",
         common: "「ザ」や「ダ」になりやすい音です。",
         draw: {
@@ -100,9 +134,9 @@ const soundInfo = {
     },
     "theta": {
         symbol: "/θ/",
-        title: "th の音（thinks, thick など：息だけ）",
+        title: "th の音（things, think など：息だけ）",
         advice: "舌先を上下の前歯の間に軽く出し、声は出さずに、息だけをすき間から出します。声を出すと濁った音になるので、息の音だけにするのがコツです。",
-        common: "「サ」や「ス」、「タ」になりやすい音です（thick が sick のように聞こえます）。",
+        common: "「サ」や「ス」、「タ」になりやすい音です（think が sink のように聞こえます）。",
         draw: {
             jaw: 0,
             protrude: 0,
@@ -118,9 +152,9 @@ const soundInfo = {
     },
     "s": {
         symbol: "/s/",
-        title: "s の音（sees, sea, soup など）",
+        title: "s の音（sun, sit, seat, sing など）",
         advice: "上下の歯をほぼ閉じ、舌先を上の歯ぐきに近づけて、すき間をつくります。声を出さず、そのすき間から息を細く強く出します。唇は丸めず、軽く横に引きます。",
-        common: "θ（thick の th）と混ざりやすい音です。s では、舌を歯の間に出しません。",
+        common: "θ（think の th）や sh と混ざりやすい音です。s では、舌を歯の間に出さず、唇も丸めません。",
         draw: {
             jaw: -6,
             protrude: 0,
@@ -141,9 +175,9 @@ const soundInfo = {
     },
     "sh": {
         symbol: "/ʃ/",
-        title: "sh の音（she, sheep など）",
+        title: "sh の音（sheet など）",
         advice: "唇を軽く丸めて前に出し、舌先を歯ぐきの少し後ろに近づけて、舌全体を少し後ろに引きます。声を出さず、息を長く出して「シュー」という音を出します。",
-        common: "s と区別がつかず、she が see のようになりやすい音です。",
+        common: "s と区別がつかず、sheet が seat のようになりやすい音です。",
         draw: {
             jaw: -4,
             protrude: 6,
@@ -160,23 +194,41 @@ const soundInfo = {
                 (112 + j) + " Z"
         }
     },
-    "b": {
-        symbol: "/b/",
-        title: "b の音（bought, brother, by など）",
-        advice: "両方の唇をしっかり閉じ、口の中に息をためてから、唇を開いて一気に声を出します。v のように上の歯を唇に当てないのがコツです。",
-        common: "唇を軽く閉じるだけで、息の破裂が弱くなりやすい音です。",
+    "n": {
+        symbol: "/n/",
+        title: "n の音（sun など）",
+        advice: "舌先を上の前歯の裏の歯ぐきにしっかり押し当て、口の中を舌でふさぎます。そのまま声を出し、息を鼻から出します。唇は閉じません。",
+        common: "唇を閉じて m のようになりやすい音です（sun が sum のように聞こえます）。",
+        draw: {
+            jaw: 0,
+            protrude: 0,
+            rounded: false,
+            labelY: 106,
+            note: "舌先を歯ぐきにつけ、鼻から声",
+            arrow: false,
+            extra: NASAL_ARROW,
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C54 100 84 92 108 84 C120 78 130 70 140 66 L145 70 C142 82 132 94 124 " +
+                (104 + j) + " L112 " + (108 + j) + " Z"
+        }
+    },
+    "m": {
+        symbol: "/m/",
+        title: "m の音（awesome, my など）",
+        advice: "両方の唇をしっかり閉じ、舌の力を抜いて口の中に置きます。唇を閉じたまま声を出し、息を鼻から出します。語の終わりの m でも、唇を閉じたまま音を止めます。",
+        common: "唇を閉じきれず、n のような音になりやすい音です（awesome の最後が awesone のように聞こえます）。",
         draw: {
             jaw: 0,
             protrude: 0,
             rounded: false,
             lowerLipY: 71,
             lowerLipRx: 9,
-            lowerLipRy: 7,
+            lowerLipRy: 8,
             labelY: 108,
-            note: "両唇を閉じてから一気に開く",
+            note: "両唇を閉じ、鼻から声",
             arrow: false,
-            extra:
-                '<path d="M176 60 L190 54 M178 70 L192 70 M176 80 L190 86" stroke="#1976d2" stroke-width="2" fill="none"/>',
+            extra: NASAL_ARROW,
             tongue: (j) =>
                 "M44 " + (116 + j) +
                 " C60 " + (110 + j) + " 90 " + (106 + j) + " 118 " + (104 + j) +
@@ -184,32 +236,70 @@ const soundInfo = {
                 " L116 " + (114 + j) + " L98 " + (116 + j) + " Z"
         }
     },
-    "v": {
-        symbol: "/v/",
-        title: "v の音",
-        advice: "上の前歯を下唇に軽く当てて、わずかなすき間をつくります。そのまま声を出しながら息を出し、唇に細かい振動を感じるようにします。両唇を合わせないのがコツです。",
-        common: "両唇を使う「バ」行になりやすい音です（vest が best のように聞こえます）。",
+    "y": {
+        symbol: "/j/",
+        title: "y の音（year など）",
+        advice: "舌の前のほうを上あごに近づけ、唇を横に引いて「イ」の形をつくります。そこから、すぐ次の母音へなめらかに移ります。「イ」と切らずに、1つの音として続けて発音するのがコツです。",
+        common: "y を発音せず、ear のように聞こえやすい音です（year と ear の違いは、この y の有無です）。",
         draw: {
-            jaw: 0,
+            jaw: 4,
             protrude: 0,
             rounded: false,
-            lowerLipY: 70,
-            lowerLipRx: 10,
-            lowerLipRy: 7,
-            labelY: 108,
-            note: "上の歯を下唇に当てて声を出す",
+            lipRx: 11,
+            lipRy: 5,
+            labelY: 112,
+            note: "舌の前を上あごに近づけてから次の音へ",
             arrow: false,
             tongue: (j) =>
                 "M44 " + (116 + j) +
-                " C60 " + (110 + j) + " 90 " + (106 + j) + " 118 " + (104 + j) +
-                " L136 " + (104 + j) + " L136 " + (110 + j) +
-                " L116 " + (114 + j) + " L98 " + (116 + j) + " Z"
+                " C56 96 84 74 112 62 C124 58 134 58 142 60 L142 68 C134 80 124 92 114 102 L100 " +
+                (112 + j) + " Z"
+        }
+    },
+    "ng": {
+        symbol: "/ŋ/",
+        title: "ŋ の音（sing, things など）",
+        advice: "舌の奥を、上あごの奥（やわらかい部分）につけて、口の奥をふさぎます。声を出し、息を鼻から出します。「ング」と g の音を足さず、鼻にかかった音で止めます。",
+        common: "最後に g の音が入って「ング」になったり、n のように舌先を歯ぐきにつけたりしやすい音です。",
+        draw: {
+            jaw: 4,
+            protrude: 0,
+            rounded: false,
+            labelY: 112,
+            note: "舌の奥を上あごの奥につけ、鼻から声",
+            arrow: false,
+            extra: NASAL_ARROW,
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C48 92 58 66 74 52 C84 44 96 48 100 58 C106 76 120 92 134 100 L132 106 L100 " +
+                (114 + j) + " Z"
+        }
+    },
+    "ngk": {
+        symbol: "/ŋk/",
+        title: "ŋk の音（think など）",
+        advice: "まず ŋ の形で、舌の奥を上あごの奥につけ、鼻から声を出します。そのあと、舌の奥を離すと同時に、口から息を破裂させて k の音を足します。k は声を出さず、息だけで出すのがコツです。",
+        common: "k が弱くなって ŋ だけになったり、「ンク」と母音を足したりしやすい音です（think が thing のように聞こえます）。",
+        draw: {
+            jaw: 4,
+            protrude: 0,
+            rounded: false,
+            labelY: 112,
+            note: "ŋ の形から舌を離して息を破裂（k）",
+            arrow: false,
+            extra:
+                '<path d="M126 76 L176 76" stroke="#1976d2" stroke-width="2" fill="none"/>' +
+                '<path d="M174 70 L184 76 L174 82 Z" fill="#1976d2"/>',
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C48 92 58 66 74 52 C84 44 96 48 100 58 C106 76 120 92 134 100 L132 106 L100 " +
+                (114 + j) + " Z"
         }
     },
     "f": {
         symbol: "/f/",
-        title: "f の音",
-        advice: "v と同じ口の形で、声を出さず、息だけを出します。上の前歯を下唇に軽く当て、すき間から息を強めに出すと「フッ」という音になります。",
+        title: "f の音（feels など）",
+        advice: "上の前歯を下唇に軽く当て、声を出さず、息だけをすき間から強めに出します。「フッ」という音になります。両唇をすぼめないのがコツです。",
         common: "両唇をすぼめる日本語の「フ」になりやすい音です。",
         draw: {
             jaw: 0,
@@ -228,11 +318,33 @@ const soundInfo = {
                 " L116 " + (114 + j) + " L98 " + (116 + j) + " Z"
         }
     },
+    "v": {
+        symbol: "/v/",
+        title: "v の音（covered など）",
+        advice: "上の前歯を下唇に軽く当てて、わずかなすき間をつくります。そのまま声を出しながら息を出し、唇に細かい振動を感じるようにします。両唇を合わせないのがコツです。",
+        common: "両唇を使う「バ」行になりやすい音です。",
+        draw: {
+            jaw: 0,
+            protrude: 0,
+            rounded: false,
+            lowerLipY: 70,
+            lowerLipRx: 10,
+            lowerLipRy: 7,
+            labelY: 108,
+            note: "上の歯を下唇に当てて声を出す",
+            arrow: false,
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C60 " + (110 + j) + " 90 " + (106 + j) + " 118 " + (104 + j) +
+                " L136 " + (104 + j) + " L136 " + (110 + j) +
+                " L116 " + (114 + j) + " L98 " + (116 + j) + " Z"
+        }
+    },
     "r": {
         symbol: "/r/",
         title: "r の音",
         advice: "舌先は上あごにつけません。舌を後ろに引いて奥のほうを盛り上げ、舌先を少し持ち上げます。唇を軽く丸めて前に出し、口の中で舌が何にも触れないまま声を出します。",
-        common: "日本語のラ行のように、舌先をはじいてしまいやすい音です。",
+        common: "日本語のラ行のように、舌先をはじいてしまいやすい音です（right が light のように聞こえます）。",
         draw: {
             jaw: 0,
             protrude: 8,
@@ -266,9 +378,9 @@ const soundInfo = {
     },
     "iy": {
         symbol: "/iː/",
-        title: "iː（she, sees, sheep, sea の ee）の音",
-        advice: "口角を横にしっかり引き、舌を高く前に出して、「イー」と少し長めに出します。日本語の「イ」より唇の緊張を保ったまま、伸ばすのがコツです。",
-        common: "短い「イ」になり、sheep が ship のように聞こえやすい音です。",
+        title: "iː（seat, sheet, feels の ee）の音",
+        advice: "口角を横にしっかり引き、舌を高く前に出して、「イー」と少し長めに出します。唇の緊張を保ったまま、伸ばすのがコツです。",
+        common: "短い「イ」になり、seat が sit のように聞こえやすい音です。",
         draw: {
             jaw: 4,
             protrude: 0,
@@ -286,9 +398,9 @@ const soundInfo = {
     },
     "ih": {
         symbol: "/ɪ/",
-        title: "ɪ（Vicky, thinks, thick の i）の音",
+        title: "ɪ（sit, sing, think, year, ear の i）の音",
         advice: "日本語の「イ」より口を少し開け、力を抜いて短く出します。舌は「イー」ほど高くせず、「イ」と「エ」の中間のような、ゆるい音にします。",
-        common: "「イー」と長く伸びやすく、短い音と長い音の区別がなくなりやすい音です。",
+        common: "「イー」と長く伸びやすく、sit が seat のように聞こえやすい音です。",
         draw: {
             jaw: 8,
             protrude: 0,
@@ -303,29 +415,9 @@ const soundInfo = {
                 " L116 " + (100 + j) + " L98 " + (110 + j) + " Z"
         }
     },
-    "uw": {
-        symbol: "/uː/",
-        title: "uː（soup の ou）の音",
-        advice: "唇を丸めて前に突き出し、舌の奥を高く持ち上げて、「ウー」と少し長めに出します。日本語の「ウ」より、唇をしっかり丸めるのがコツです。",
-        common: "唇を丸めず、日本語の「ウ」のように平らな音になりやすい音です。",
-        draw: {
-            jaw: 2,
-            protrude: 8,
-            rounded: true,
-            lipRx: 6,
-            lipRy: 9,
-            labelY: 110,
-            note: "唇を丸めて前に出し、舌の奥を上げる",
-            arrow: false,
-            tongue: (j) =>
-                "M44 " + (116 + j) +
-                " C56 100 76 72 100 66 C112 62 120 68 124 80 L136 98 L120 104 L100 " +
-                (112 + j) + " Z"
-        }
-    },
     "ae": {
         symbol: "/æ/",
-        title: "æ（at, Sally の a）の音",
+        title: "æ（at, last の a）の音",
         advice: "口を縦に大きく開け、口角を少し横に引きます。「ア」と「エ」の中間の音を、舌先を下の前歯の裏に置いたまま出します。あごを下げる意識を持つと出しやすくなります。",
         common: "日本語の「ア」や「エ」になりやすい音です。",
         draw: {
@@ -344,7 +436,7 @@ const soundInfo = {
     },
     "uh": {
         symbol: "/ʌ/",
-        title: "ʌ（brother の o）の音",
+        title: "ʌ（sun, covered の u）の音",
         advice: "口を軽く開け、力を抜いて短く「ア」と言います。日本語の「ア」より口の開きを小さくして、のどの奥から短く出します。",
         common: "日本語の「ア」や「オ」のように、口を開けすぎたり長く伸ばしたりしやすい音です。",
         draw: {
@@ -377,6 +469,24 @@ const soundInfo = {
                 " C58 " + (106 + j) + " 84 " + (100 + j) + " 108 " + (98 + j) +
                 " L128 " + (100 + j) + " L124 " + (112 + j) +
                 " L100 " + (114 + j) + " Z"
+        }
+    },
+    "ei": {
+        symbol: "/eɪ/",
+        title: "eɪ（today の a）の音",
+        advice: "「エ」から「イ」へなめらかに動かします。「エー」と伸ばしきらず、終わりにかけて舌を少し持ち上げ、口を少しだけ閉じていきます。",
+        common: "「エー」と長く伸ばしたままで、「イ」の動きが入らなくなりやすい音です。",
+        draw: {
+            jaw: 6,
+            protrude: 0,
+            rounded: false,
+            labelY: 108,
+            note: "エ → イへなめらかに",
+            arrow: false,
+            tongue: (j) =>
+                "M44 " + (116 + j) +
+                " C54 96 80 84 106 78 C124 74 138 74 144 78 L144 " + (88 + j) +
+                " L124 " + (100 + j) + " L104 " + (110 + j) + " Z"
         }
     }
 };
@@ -920,8 +1030,11 @@ function startRecognition() {
 
 function setPhrase(phrase) {
     currentText = phrase.text;
+    phraseLevelElement.textContent = phrase.num + "　" + levels[phrase.level];
+    phraseLevelElement.className = "level-badge level-" + phrase.level;
     phraseElement.textContent = phrase.text;
     phraseJaElement.textContent = phrase.ja;
+    phraseFocusElement.textContent = "重点ポイント：" + phrase.focus;
 
     targetWords = phrase.text
         .split(/\s+/)
@@ -969,33 +1082,44 @@ function routeFromHash() {
 }
 
 function buildPhraseList() {
-    phrases.forEach((phrase) => {
-        const item = document.createElement("button");
-        item.type = "button";
-        item.className = "phrase-item";
+    levelOrder.forEach((levelKey) => {
+        const group = phrases.filter((phrase) => phrase.level === levelKey);
 
-        const text = document.createElement("span");
-        text.className = "phrase-item-text";
-        text.textContent = phrase.text;
+        if (group.length === 0) return;
 
-        const ja = document.createElement("span");
-        ja.className = "phrase-item-ja";
-        ja.textContent = phrase.ja;
+        const title = document.createElement("h2");
+        title.className = "level-title level-" + levelKey;
+        title.textContent = levels[levelKey];
+        phraseList.appendChild(title);
 
-        const focus = document.createElement("span");
-        focus.className = "phrase-item-focus";
-        focus.textContent = "重点の音：" + phrase.focus;
+        group.forEach((phrase) => {
+            const item = document.createElement("button");
+            item.type = "button";
+            item.className = "phrase-item level-" + levelKey;
 
-        item.appendChild(text);
-        item.appendChild(ja);
-        item.appendChild(focus);
+            const text = document.createElement("span");
+            text.className = "phrase-item-text";
+            text.textContent = phrase.num + " " + phrase.text;
 
-        item.addEventListener("click", () => {
-            cameFromSelect = true;
-            location.hash = "phrase" + phrase.id;
+            const ja = document.createElement("span");
+            ja.className = "phrase-item-ja";
+            ja.textContent = phrase.ja;
+
+            const focus = document.createElement("span");
+            focus.className = "phrase-item-focus";
+            focus.textContent = "重点ポイント：" + phrase.focus;
+
+            item.appendChild(text);
+            item.appendChild(ja);
+            item.appendChild(focus);
+
+            item.addEventListener("click", () => {
+                cameFromSelect = true;
+                location.hash = "phrase" + phrase.id;
+            });
+
+            phraseList.appendChild(item);
         });
-
-        phraseList.appendChild(item);
     });
 }
 
