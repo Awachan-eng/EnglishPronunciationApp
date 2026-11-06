@@ -1,4 +1,4 @@
-const VERSION = "10";
+const VERSION = "8";
 
 const levels = {
     required: "必須の英文",
@@ -20,38 +20,30 @@ const phrases = [
     {
         id: 2,
         num: "②",
-        level: "required",
-        text: "This is for my sister.",
-        ja: "これは私の姉（妹）のためのものです。",
-        focus: "th と s の区別"
-    },
-    {
-        id: 3,
-        num: "③",
         level: "easy",
         text: "Today, the sun feels awesome.",
         ja: "今日は太陽が最高に気持ちいいです。",
         focus: "n と m の区別"
     },
     {
-        id: 4,
-        num: "④",
+        id: 3,
+        num: "③",
         level: "easy",
         text: "Vicky bought a vest for her brother.",
         ja: "ヴィッキーは兄（弟）のためにベストを買いました。",
         focus: "v と b の区別"
     },
     {
-        id: 5,
-        num: "⑤",
+        id: 4,
+        num: "④",
         level: "high",
         text: "I want to sit on a seat covered with a white sheet.",
         ja: "私は白いシーツで覆われた座席に座りたいです。",
         focus: "i と iː 及び s と ʃ の区別"
     },
     {
-        id: 6,
-        num: "⑥",
+        id: 5,
+        num: "⑤",
         level: "high",
         text: "I like to sing about the things I think about.",
         ja: "私は、自分が考えていることについて歌うのが好きです。",
@@ -104,10 +96,6 @@ const wordInfo = {
     "at": { ipa: "/æt/", sounds: ["ae"] },
     "the": { ipa: "/ðə/", sounds: ["th"] },
     "light": { ipa: "/laɪt/", sounds: ["l"] },
-    "this": { ipa: "/ðɪs/", sounds: ["th", "ih", "s"] },
-    "is": { ipa: "/ɪz/", sounds: ["ih"] },
-    "my": { ipa: "/maɪ/", sounds: ["m"] },
-    "sister": { ipa: "/ˈsɪstər/", sounds: ["s", "ih", "r"] },
     "today": { ipa: "/təˈdeɪ/", sounds: ["ei"] },
     "sun": { ipa: "/sʌn/", sounds: ["s", "uh", "n"] },
     "feels": { ipa: "/fiːlz/", sounds: ["f", "iy", "l"] },
@@ -138,9 +126,9 @@ const NASAL_ARROW =
 const soundInfo = {
     "th": {
         symbol: "/ð/",
-        title: "th の音（the, this, brother など：声を出す）",
+        title: "th の音（the, brother など：声を出す）",
         advice: "舌先を上の前歯と下の前歯の間に軽く出し、歯に軽く当てたまま、声を出しながら息を出します。舌を歯の裏へ引っ込めてしまわないのがコツです。",
-        common: "「ザ」や「ダ」になりやすい音です（this が zis や dis のように聞こえます）。",
+        common: "「ザ」や「ダ」になりやすい音です。",
         draw: {
             jaw: 0,
             protrude: 0,
@@ -174,7 +162,7 @@ const soundInfo = {
     },
     "s": {
         symbol: "/s/",
-        title: "s の音（this, sister, sun, vest, sit, seat, sing など）",
+        title: "s の音（sun, vest, sit, seat, sing など）",
         advice: "上下の歯をほぼ閉じ、舌先を上の歯ぐきに近づけて、すき間をつくります。声を出さず、そのすき間から息を細く強く出します。唇は丸めず、軽く横に引きます。",
         common: "θ（think の th）や sh と混ざりやすい音です。s では、舌を歯の間に出さず、唇も丸めません。",
         draw: {
@@ -261,7 +249,7 @@ const soundInfo = {
     },
     "m": {
         symbol: "/m/",
-        title: "m の音（my, awesome など）",
+        title: "m の音（awesome など）",
         advice: "両方の唇をしっかり閉じ、舌の力を抜いて口の中に置きます。唇を閉じたまま声を出し、息を鼻から出します。語の終わりの m でも、唇を閉じたまま音を止めます。",
         common: "唇を閉じきれず、n のような音になりやすい音です（awesome の最後が awesone のように聞こえます）。",
         draw: {
@@ -368,7 +356,7 @@ const soundInfo = {
     },
     "r": {
         symbol: "/r/",
-        title: "r の音（right, for, sister など）",
+        title: "r の音",
         advice: "舌先は上あごにつけません。舌を後ろに引いて奥のほうを盛り上げ、舌先を少し持ち上げます。唇を軽く丸めて前に出し、口の中で舌が何にも触れないまま声を出します。",
         common: "日本語のラ行のように、舌先をはじいてしまいやすい音です（right が light のように聞こえます）。",
         draw: {
@@ -424,7 +412,7 @@ const soundInfo = {
     },
     "ih": {
         symbol: "/ɪ/",
-        title: "ɪ（this, is, sister, sit, sing, think の i）の音",
+        title: "ɪ（Vicky, sit, sing, think の i）の音",
         advice: "日本語の「イ」より口を少し開け、力を抜いて短く出します。舌は「イー」ほど高くせず、「イ」と「エ」の中間のような、ゆるい音にします。",
         common: "「イー」と長く伸びやすく、sit が seat のように聞こえやすい音です。",
         draw: {
